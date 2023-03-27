@@ -37,8 +37,7 @@
         </div>
       </div>
       <div class="save__wrapper">
-        <div>border</div>
-        <div>итого:</div>
+        <div>Итого:</div>
         <button class="save-btn" @click.prevent="saveOrdersList">Сохранить</button>
       </div>
     </main>
