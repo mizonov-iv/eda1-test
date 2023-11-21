@@ -32,7 +32,7 @@
     line-height: normal;
 }
 
-input {
+.form-input {
     padding: 10px;
     background: #EEF8FF;
     border: none;

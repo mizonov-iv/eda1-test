@@ -1,26 +1,28 @@
 <script setup lang="ts">
 import {ref} from "vue";
+import {useOrdersStore} from "./stores/OrdersStore";
 
-const products = ref([
-  {
-    id: 1,
-    title: "Борщевой набор номер три",
-    price: 1000,
-    count: 11
-  },
-  {
-    id: 2,
-    title: "Борщевой набор номер два",
-    price: 1100,
-    count: 12
-  },
-  {
-    id: 3,
-    title: "Борщевой набор номер один",
-    price: 1200,
-    count: 13
+const ordersStore = useOrdersStore();
+ordersStore.getProductsList()
+
+const selectedProduct = ref();
+const productCount = ref();
+
+const selectedProducts = ref([]);
+
+function handleSelect () {
+
+  const newProduct = {
+    ...selectedProduct.value,
+    count: productCount.value
   }
-])
+
+  selectedProducts.value.push(newProduct)
+
+  selectedProduct.value = '';
+  productCount.value = '';
+}
+
 </script>
 
 <template>
@@ -28,20 +30,24 @@ const products = ref([
     <p>Test project</p>
   </nav>
   <div class="container">
-    <form class="form-field">
+    <form class="form-field" @submit.prevent="handleSelect">
       <div class="input-wrapper">
         <label class="input-label">Выберите продукцию</label>
-        <input type="text">
+        <select class="form-input" v-model="selectedProduct">
+          <option :value="item" v-for="item in ordersStore.productsList" :key="item.id">
+            {{item.title}}
+          </option>
+        </select>
       </div>
       <div class="input-wrapper">
         <label class="input-label">Выберите количество</label>
-        <input type="text">
+        <input class="form-input" type="text" v-model="productCount">
       </div>
       <button class="form-btn" type="submit">Добавить</button>
     </form>
 
-    <ul class="products-list">
-      <li class="product-item" v-for="product in products" :key="product.id">
+    <ul class="products-list" v-if="selectedProducts.length">
+      <li class="product-item" v-for="product in selectedProducts" :key="product.id">
         <p class="product-item-title">{{ product.title }}</p>
         <div class="product-item-descr-wrap">
           <p class="product-item-text">{{ product.count }} шт.</p>
